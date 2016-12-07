@@ -15,5 +15,11 @@ exports.toBase64 = function toBase64 (bn) {
 
 // Convert a base64 encoded string to a BN.js instance
 exports.toBn = function toBn (str) {
-  return new BN(Buffer.from(str, 'base64'))
+  let buf
+  try { // workaround for node 4.x not supporting base64 in Buffer.from
+    buf = Buffer.from(str, 'base64')
+  } catch (err) {
+    buf = new Buffer(str, 'base64')
+  }
+  return new BN(buf)
 }
